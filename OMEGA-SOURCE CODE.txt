@@ -1,0 +1,97 @@
+import pyttsx3
+import datetime
+import speech_recognition as sr
+import wikipedia
+import webbrowser
+import os
+import sys
+def speak(text):
+   engine.say(text)
+   engine.runAndWait()
+def wishme():
+    hour = int(datetime.datetime.now().hour)
+    if hour>=0 and hour<12:
+        speak("good morning sir ")
+    elif hour>=12 and hour<18:
+        speak("good after noon sir")
+    else:
+        speak('good evening sir')
+    speak("I am omega , how may i help you")
+
+engine=pyttsx3.init('sapi5')
+voices=engine.getProperty('voices')
+engine.setProperty('voices',voices[0].id)
+def takecommand():
+    r=sr.Recognizer()
+    with sr.Microphone() as source:
+        print("please speak....")
+        r.pause_threshold=2
+        audio=r.listen(source)
+    try:
+        speak("please wait!")
+        print("please wait")
+        query=r.recognize_google(audio)
+        print("you said:" + query)
+        
+    except Exception as e:
+        print("please say that again ..")
+        return"None"
+    return query
+if __name__=="__main__":
+   
+   
+   
+   
+   wishme()
+   while True:
+      
+      
+      query=takecommand().lower()
+
+      if'wikipedia' in query:
+          speak('searching wikipedia')
+          query=query.replace('wikipedia',"")
+          results=wikipedia.summary(query,sentences=2)
+          speak("according to wikipedia")
+          speak(results)
+          print(results)
+
+      elif'open youtube'in query:
+           webbrowser.open("youtube.com")
+      elif'open google'in query:
+           webbrowser.open('google.com')
+      elif" open video"in query:
+           video_dir='E:\\videos\\video'
+           video=os.listdir(video_dir)
+           print(video)
+           os.startfile(os.path.join(video_dir,video[0]))
+   
+           
+      elif "the time" in query:
+         strtime=datetime.datetime.now().strftime("%H:%M:%S")
+         speak(f'sir time is {strtime}')
+      elif 'open anaconda navigator' in query:
+         path="E:\\anaconda\\pythonw.exe E:\\anaconda\\cwp.py E:\\anaconda E:\\anaconda\\pythonw.exe E:\\anaconda\\Scripts\\anaconda-navigator-script.py"
+         os.startfile(path)
+      elif 'open eclipse' in query:
+         path="E:\\Eclipse\\eclipse\\eclipse.exe"
+         os.startfile(path)
+      elif 'email' in query:
+         try:
+            speak("tell me th e thing ,that to be sent via email")
+            cont=takecommand()
+            to= "ritiksharma0805@gmail.com"
+            sendEmail(to,cont)
+            speak("email has been sent successfully")
+         except Exception as e:
+            print(e)
+            speak("oops there is a problem")
+      
+      
+      if 'quit' in query:
+         speak(" thank you sir for using me ,have a nice day")
+         sys.exit()
+
+
+
+
